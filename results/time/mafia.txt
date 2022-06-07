@@ -1,0 +1,64 @@
+		     \||||||||||||||||||/
+		   --- Welcome to Maude ---
+		     /||||||||||||||||||\
+	    Maude 3.2.1 built: Feb 21 2022 18:21:17
+	     Copyright 1997-2022 SRI International
+		   Sun Jun  5 16:45:41 2022
+==========================================
+reduce in TEST-PROTOCOL : narrowing(upModule('BRANDS-CHAUM, false), upTerm({[
+    nilEe,-(commit(n(b, rb1), s(b, rb2))
+ @ b : t1:Real -> i : t2:Real),{t2:Real === t1:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+(commit(n(b, rb1), s(b, rb2))
+ @ i : t2:Real -> a : t3:Real),-(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),{t4:Real === t3:Real + dai:Real and dai:Real > (
+    0/1).Real},+(n(a, ra1)
+ @ i : t4:Real -> b : t5:Real),-((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real),{t6:Real === t5:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+((n(a, ra1) * n(b, rb1))
+ @ i : t6:Real -> a : t7:Real) | nileE] & [nilEe,+(commit(n(b, rb1), s(b, rb2))
+ @ b : t1:Real -> i : t2:Real),-(NA:Nonce
+ @ i : t4:Real -> b : t5:Real),{t5:Real === t4:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real) | nileE] & [nilEe,-(CommitB:NTMsg
+ @ i : t2:Real -> a : t3:Real),{t3:Real === t2:Real + dai:Real and dai:Real > (
+    0/1).Real},+(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),-((NB:Nonce * n(a, ra1))
+ @ i : t6:Real -> a : t7:Real),{t6:Real >= t3:Real and t7:Real === t6:Real +
+    dai:Real and dai:Real > (0/1).Real},{t7:Real - t3:Real <= (2/1).Real *
+    d:Real and d:Real > (0/1).Real} | nileE]{inI(commit(n(b, rb1), s(b, rb2))
+ @ b : t1:Real -> i : t2:Real),inI(commit(n(b, rb1), s(b, rb2))
+ @ i : t2:Real -> a : t3:Real),inI(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),inI(n(a, ra1)
+ @ i : t4:Real -> b : t5:Real),inI((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real),inI((n(a, ra1) * n(b, rb1))
+ @ i : t6:Real -> a : t7:Real)}}), =>*, upTerm({[nilEe | -(commit(n(b, rb1), s(
+    b, rb2))
+ @ b : t1:Real -> i : t2:Real),{t2:Real === t1:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+(commit(n(b, rb1), s(b, rb2))
+ @ i : t2:Real -> a : t3:Real),-(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),{t4:Real === t3:Real + dai:Real and dai:Real > (
+    0/1).Real},+(n(a, ra1)
+ @ i : t4:Real -> b : t5:Real),-((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real),{t6:Real === t5:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+((n(a, ra1) * n(b, rb1))
+ @ i : t6:Real -> a : t7:Real),nileE] & [nilEe | +(commit(n(b, rb1), s(b, rb2))
+ @ b : t1:Real -> i : t2:Real),-(NA:Nonce
+ @ i : t4:Real -> b : t5:Real),{t5:Real === t4:Real + dbi:Real and dbi:Real > (
+    0/1).Real},+((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real),nileE] & [nilEe | -(CommitB:NTMsg
+ @ i : t2:Real -> a : t3:Real),{t3:Real === t2:Real + dai:Real and dai:Real > (
+    0/1).Real},+(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),-((NB:Nonce * n(a, ra1))
+ @ i : t6:Real -> a : t7:Real),{t6:Real >= t3:Real and t7:Real === t6:Real +
+    dai:Real and dai:Real > (0/1).Real},{t7:Real - t3:Real <= (2/1).Real *
+    d:Real and d:Real > (0/1).Real},nileE]{nI(commit(n(b, rb1), s(b, rb2))
+ @ b : t1:Real -> i : t2:Real),nI(commit(n(b, rb1), s(b, rb2))
+ @ i : t2:Real -> a : t3:Real),nI(n(a, ra1)
+ @ a : t3:Real -> i : t4:Real),nI(n(a, ra1)
+ @ i : t4:Real -> b : t5:Real),nI((n(a, ra1) * n(b, rb1))
+ @ b : t5:Real -> i : t6:Real),nI((n(a, ra1) * n(b, rb1))
+ @ i : t6:Real -> a : t7:Real)}}), standard smt, none, empty, '_>_['_+_[
+    'dai:Real,'dbi:Real],'d:Real], '@, unbounded, unbounded) .
+rewrites: 315786 in 1044ms cpu (1047ms real) (302477 rewrites/second)
+result SolutionList: noSolution
+Bye.

@@ -1,0 +1,101 @@
+mod TEST-PROTOCOL is
+  protecting NARROWING .
+  protecting BRANDS-CHAUM .
+endm
+
+reduce in TEST-PROTOCOL :
+        narrowing(upModule('BRANDS-CHAUM, false),
+              --- INITIAL TERM
+              upTerm(
+              {(
+              --- Alice, verifier
+              [nilEe, 
+                -(Commit:NTMsg                                        @ b : x1:Real,y1:Real,z1:Real,t1:Real -> a : t2:Real), 
+                     {(t2:Real === t1:Real + dab1:Real) and (dab1:Real > 0/1) and
+                     ((dab1:Real * dab1:Real) === (((x1:Real - ax:Real) * (x1:Real - ax:Real)) + 
+                     ((y1:Real - ay:Real) * (y1:Real - ay:Real))) + ((z1:Real - az:Real) * (z1:Real - az:Real)))},      
+                +(n(a,ra1)                                            @ a : ax:Real,ay:Real,az:Real,t2:Real -> b : t3:Real),
+                -((n(a,ra1) * NB:Nonce)                               @ b : x3:Real,y3:Real,z3:Real,t3:Real -> a : t4:Real), 
+                     {(t4:Real === t3:Real + dab3:Real) and (dab3:Real > 0/1) and
+                     ((dab3:Real * dab3:Real) === (((x3:Real - ax:Real) * (x3:Real - ax:Real)) + 
+                     ((y3:Real - ay:Real) * (y3:Real - ay:Real))) + ((z3:Real - az:Real) * (z3:Real - az:Real)))},      
+                     {((t4:Real - t2:Real) <= (2/1 * d:Real)) and (d:Real > 0/1)},
+                -(SB:Secret                                           @ b : x4:Real,y4:Real,z4:Real,t5:Real -> a : t6:Real),
+                     {(t6:Real === t5:Real + dab4:Real) and (dab4:Real > 0/1) and 
+                     ((dab4:Real * dab4:Real) === (((x4:Real - ax:Real) * (x4:Real - ax:Real)) + 
+                     ((y4:Real - ay:Real) * (y4:Real - ay:Real))) + ((z4:Real - az:Real) * (z4:Real - az:Real)))},  
+                -(sign(b,(n(a,ra1) * NB:Nonce) ; n(a,ra1))            @ b : x5:Real,y5:Real,z5:Real,t7:Real -> a : t8:Real), 
+                     {(t8:Real ===  t7:Real + dab5:Real) and (dab5:Real > 0/1) and
+                     ((dab5:Real * dab5:Real) === (((x5:Real - ax:Real) * (x5:Real - ax:Real)) + 
+                     ((y5:Real - ay:Real) * (y5:Real - ay:Real))) + ((z5:Real - az:Real) * (z5:Real - az:Real)))} 
+              | nileE]
+              &
+              --- Bob, prover
+              [nilEe,
+                +(commit(n(b,rb1),s(b,rb2))                           @ b : bx:Real,by:Real,bz:Real,t1:Real -> a : t2:Real),
+                -(NA:Nonce                                            @ a : x2:Real,y2:Real,z2:Real,t2:Real -> b : t3:Real),
+                     {(t3:Real === t2:Real + dab2:Real) and (dab2:Real > 0/1) and
+                     ((dab2:Real * dab2:Real) === (((x2:Real - bx:Real) * (x2:Real - bx:Real)) + 
+                     ((y2:Real - by:Real) * (y2:Real - by:Real))) + ((z2:Real - bz:Real) * (z2:Real - bz:Real)))},
+                +((NA:Nonce * n(b,rb1))                               @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t4:Real),
+                +(s(b,rb2)                                            @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t6:Real),
+                +(sign(b,(NA:Nonce * n(b,rb1)) ; NA:Nonce)            @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t8:Real)                                     
+              
+              | nileE]) 
+              --- Intruder Knowledge
+              { 
+                inI(commit(n(b,rb1),s(b,rb2))                          @ b : bx:Real,by:Real,bz:Real,t1:Real -> a : t2:Real),
+                inI(n(a,ra1)                                           @ a : ax:Real,ay:Real,az:Real,t2:Real -> b : t3:Real),
+                inI((n(a,ra1) * n(b,rb1))                              @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t4:Real),
+                inI(s(b,rb2)                                           @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t6:Real),
+                inI(sign(b,(n(a,ra1) * n(b,rb1)) ; n(a,ra1))           @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t8:Real) 
+              } 
+              }), 
+              =>*,
+              --- FINAL TERM
+              upTerm(
+              {(
+              --- Alice, verifier
+              [nilEe | 
+                -(Commit:NTMsg                                        @ b : x1:Real,y1:Real,z1:Real,t1:Real -> a : t2:Real), 
+                     {(t2:Real === t1:Real + dab1:Real) and (dab1:Real > 0/1) and
+                     ((dab1:Real * dab1:Real) === (((x1:Real - ax:Real) * (x1:Real - ax:Real)) + 
+                     ((y1:Real - ay:Real) * (y1:Real - ay:Real))) + ((z1:Real - az:Real) * (z1:Real - az:Real)))},      
+                +(n(a,ra1)                                            @ a : ax:Real,ay:Real,az:Real,t2:Real -> b : t3:Real),
+                -((n(a,ra1) * NB:Nonce)                               @ b : x3:Real,y3:Real,z3:Real,t3:Real -> a : t4:Real), 
+                     {(t4:Real === t3:Real + dab3:Real) and (dab3:Real > 0/1) and
+                     ((dab3:Real * dab3:Real) === (((x3:Real - ax:Real) * (x3:Real - ax:Real)) + 
+                     ((y3:Real - ay:Real) * (y3:Real - ay:Real))) + ((z3:Real - az:Real) * (z3:Real - az:Real)))},      
+                     {((t4:Real - t2:Real) <= (2/1 * d:Real)) and (d:Real > 0/1)},
+                -(SB:Secret                                           @ b : x4:Real,y4:Real,z4:Real,t5:Real -> a : t6:Real),
+                     {(t6:Real === t5:Real + dab4:Real) and (dab4:Real > 0/1) and 
+                     ((dab4:Real * dab4:Real) === (((x4:Real - ax:Real) * (x4:Real - ax:Real)) + 
+                     ((y4:Real - ay:Real) * (y4:Real - ay:Real))) + ((z4:Real - az:Real) * (z4:Real - az:Real)))},  
+                -(sign(b,(n(a,ra1) * NB:Nonce) ; n(a,ra1))            @ b : x5:Real,y5:Real,z5:Real,t7:Real -> a : t8:Real), 
+                     {(t8:Real ===  t7:Real + dab5:Real) and (dab5:Real > 0/1) and
+                     ((dab5:Real * dab5:Real) === (((x5:Real - ax:Real) * (x5:Real - ax:Real)) + 
+                     ((y5:Real - ay:Real) * (y5:Real - ay:Real))) + ((z5:Real - az:Real) * (z5:Real - az:Real)))}, 
+              nileE]
+              &
+              --- Bob, prover
+              [nilEe | 
+                +(commit(n(b,rb1),s(b,rb2))                           @ b : bx:Real,by:Real,bz:Real,t1:Real -> a : t2:Real),
+                -(NA:Nonce                                            @ a : x2:Real,y2:Real,z2:Real,t2:Real -> b : t3:Real),
+                     {(t3:Real === t2:Real + dab2:Real) and (dab2:Real > 0/1) and
+                     ((dab2:Real * dab2:Real) === (((x2:Real - bx:Real) * (x2:Real - bx:Real)) + 
+                     ((y2:Real - by:Real) * (y2:Real - by:Real))) + ((z2:Real - bz:Real) * (z2:Real - bz:Real)))},
+                +((NA:Nonce * n(b,rb1))                               @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t4:Real),
+                +(s(b,rb2)                                            @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t6:Real),
+                +(sign(b,(NA:Nonce * n(b,rb1)) ; NA:Nonce)            @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t8:Real),                                     
+              
+              nileE]) 
+              --- Intruder Knowledge
+              { 
+                nI(commit(n(b,rb1),s(b,rb2))                          @ b : bx:Real,by:Real,bz:Real,t1:Real -> a : t2:Real),
+                nI(n(a,ra1)                                           @ a : ax:Real,ay:Real,az:Real,t2:Real -> b : t3:Real),
+                nI((n(a,ra1) * n(b,rb1))                              @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t4:Real),
+                nI(s(b,rb2)                                           @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t6:Real),
+                nI(sign(b,(n(a,ra1) * n(b,rb1)) ; n(a,ra1))           @ b : bx:Real,by:Real,bz:Real,t3:Real -> a : t8:Real) 
+              } 
+              }),
+              smt standard, none, empty, 'true.Boolean, '@, unbounded, unbounded) .

@@ -1,0 +1,95 @@
+mod TEST-PROTOCOL is
+  protecting NARROWING .
+  protecting BRANDS-CHAUM .
+endm
+
+reduce in TEST-PROTOCOL :
+        narrowing(upModule('BRANDS-CHAUM, false),
+              --- INITIAL TERM
+              upTerm(
+              {(
+              --- Intruder
+              [nilEe, 
+                -(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                        {(t2:Real === t1:Real + dbi:Real) and dbi:Real > 0/1},
+                +(commit(n(b, rb1), s(b, rb2))                          @ i : t2:Real -> a : t3:Real),
+                -(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                        {(t4:Real === t3:Real + dai:Real) and dai:Real > 0/1},
+                +(n(a,ra1)                                              @ i : t4:Real -> b : t5:Real),
+                -((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real),
+                        {(t6:Real === t5:Real + dbi:Real) and dbi:Real > 0/1},
+                +((n(a,ra1) * n(b,rb1))                                 @ i : t6:Real -> a : t7:Real)
+              | nileE]
+              &
+              --- Alice, verifier
+              [nilEe, 
+                -(CommitB:NTMsg                                         @ i : t2:Real -> a : t3:Real),
+                        {(t3:Real === t2:Real + dai:Real) and dai:Real > 0/1},
+                +(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                -((n(a,ra1) * NB:Nonce)                                 @ i : t6:Real -> a : t7:Real),
+                        {t6:Real >= t3:Real and (t7:Real === t6:Real + dai:Real) and dai:Real > 0/1},
+                        {(t7:Real - t3:Real) <= (2/1 * d:Real) and d:Real > 0/1} 
+              | nileE]
+              &
+              --- Bob, prover
+              [nilEe,  
+                +(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                -(NA:Nonce                                              @ i : t4:Real -> b : t5:Real),
+                        {(t5:Real === t4:Real + dbi:Real) and dbi:Real > 0/1},
+                +((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real)
+              | nileE]) 
+              --- Intruder Knowledge
+              { 
+                inI(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                inI(commit(n(b, rb1), s(b, rb2))                          @ i : t2:Real -> a : t3:Real),
+                inI(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                inI(n(a,ra1)                                              @ i : t4:Real -> b : t5:Real),
+                inI((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real),
+                inI((n(a,ra1) * n(b,rb1))                                 @ i : t6:Real -> a : t7:Real)       
+              }
+              }),
+              =>*,
+              --- FINAL TERM
+              upTerm(
+              {(
+              --- Intruder
+              [nilEe | 
+                -(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                        {(t2:Real === t1:Real + dbi:Real) and dbi:Real > 0/1},
+                +(commit(n(b, rb1), s(b, rb2))                          @ i : t2:Real -> a : t3:Real),
+                -(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                        {(t4:Real === t3:Real + dai:Real) and dai:Real > 0/1},
+                +(n(a,ra1)                                              @ i : t4:Real -> b : t5:Real),
+                -((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real),
+                        {(t6:Real === t5:Real + dbi:Real) and dbi:Real > 0/1},
+                +((n(a,ra1) * n(b,rb1))                                 @ i : t6:Real -> a : t7:Real),
+              nileE]
+              &
+              --- Alice, verifier
+              [nilEe | 
+                -(CommitB:NTMsg                                         @ i : t2:Real -> a : t3:Real),
+                        {(t3:Real === t2:Real + dai:Real) and dai:Real > 0/1},
+                +(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                -((n(a,ra1) * NB:Nonce)                                 @ i : t6:Real -> a : t7:Real),
+                        {t6:Real >= t3:Real and (t7:Real === t6:Real + dai:Real) and dai:Real > 0/1},
+                        {(t7:Real - t3:Real) <= (2/1 * d:Real) and d:Real > 0/1}, 
+              nileE]
+              &
+              --- Bob, prover
+              [nilEe | 
+                +(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                -(NA:Nonce                                              @ i : t4:Real -> b : t5:Real),
+                        {(t5:Real === t4:Real + dbi:Real) and dbi:Real > 0/1},
+                +((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real),
+              nileE]) 
+              --- Intruder Knowledge
+              { 
+                nI(commit(n(b, rb1), s(b, rb2))                          @ b : t1:Real -> i : t2:Real),
+                nI(commit(n(b, rb1), s(b, rb2))                          @ i : t2:Real -> a : t3:Real),
+                nI(n(a,ra1)                                              @ a : t3:Real -> i : t4:Real),
+                nI(n(a,ra1)                                              @ i : t4:Real -> b : t5:Real),
+                nI((n(a,ra1) * n(b,rb1))                                 @ b : t5:Real -> i : t6:Real),
+                nI((n(a,ra1) * n(b,rb1))                                 @ i : t6:Real -> a : t7:Real)       
+              }
+              }), 
+              smt standard, none, empty, 'true.Boolean, '@, unbounded, unbounded) .

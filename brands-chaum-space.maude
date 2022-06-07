@@ -1,0 +1,127 @@
+load smt.maude
+
+mod BRANDS-CHAUM is
+  protecting META-LEVEL .
+  protecting REAL-INTEGER .
+
+  sort Msg NTMsg TMsg .
+
+  --- XOR properties
+  sort NNSet .  
+
+  op null : -> NNSet .
+  op _*_ : NNSet NNSet -> NNSet [assoc comm frozen] .
+
+  vars X Y Z U V : [NNSet] .
+
+  eq [idem] :     X * X = null    [variant] .
+  eq [idem-Coh] : X * X * Z = Z [variant] .
+  eq [id] :       X * null = X    [variant] .
+
+  --- Nonce and secret operators
+  sorts Name Honest Intruder Fresh Secret Nonce .
+  subsorts NNSet < NTMsg < Msg .
+  subsorts Nonce Secret < NNSet .
+  subsort Name < Msg .
+  subsort Honest Intruder < Name .
+
+  ops a b : -> Honest .
+  op i : -> Intruder .
+  ops ra1 rb1 rb2 : -> Fresh .
+  op n : Name Fresh -> Nonce [frozen] .
+  op s : Name Fresh -> Secret [frozen] .
+
+  --- Sign, concatenation, commit, open and yes operators
+  op sign : Name NTMsg -> NTMsg .
+  op _;_ : NTMsg  NTMsg  -> NTMsg [gather (e E) frozen] .
+  op commit : Nonce Secret -> NTMsg .
+  op open : Nonce Secret NTMsg -> NTMsg .
+  op yes : -> NTMsg .
+
+  --- Distance operator
+  sorts CoordNameTime .
+  
+  op _:_,_,_,_ : Name Real Real Real Real -> CoordNameTime [prec 10] .
+
+  --- Time operators
+  sorts TimeInfo NameTime NameTimeSet .
+  subsort NameTime < NameTimeSet .
+  subsort TMsg < Msg .
+
+  op _@_ : NTMsg TimeInfo -> TMsg [metadata "grammar-arg-1" format (d nis d d)] .
+  op _:_ : Name Real -> NameTime .
+  op mt : -> NameTimeSet .
+  op _#_ : NameTimeSet NameTimeSet -> NameTimeSet [assoc comm id: mt] .
+  op _->_ : CoordNameTime NameTimeSet -> TimeInfo .
+
+  --- Sent message and sent message list
+  sorts SMsg SMsgN SMsgR SMsgList-eE SMsgList-Ee . 
+  op + : Msg -> SMsg .
+
+  op nileE : -> SMsgList-eE .
+  op _,_ : SMsgR SMsgList-eE  -> SMsgList-eE [gather (e E)] .
+
+  op nilEe : -> SMsgList-Ee .
+
+  sorts SMsgListN-Ee SMsgListR-Ee . 
+  subsort SMsg < SMsgN < SMsgR .
+  op {_} : Boolean -> SMsgR .
+  op - : Msg -> SMsgN .
+
+
+  subsort SMsgList-Ee < SMsgListN-Ee < SMsgListR-Ee .
+  op _,_ : SMsgListR-Ee SMsg -> SMsgList-Ee [gather (E e)] .
+  op _,_ : SMsgListR-Ee SMsgN -> SMsgListN-Ee [gather (E e)] .
+  op _,_ : SMsgListR-Ee SMsgR -> SMsgListR-Ee [gather (E e)] .
+
+  --- Strand and strand data structures
+  sorts Strand StrandSet .
+  sorts StrandR StrandSetR .
+  sorts StrandN StrandSetN .
+  subsort Strand < StrandSet .
+  subsort Strand < StrandN < StrandR .
+  subsort StrandR < StrandSetR .
+  subsort StrandN < StrandSetN .
+  subsort StrandSet < StrandSetN < StrandSetR .
+
+  op `[_|_`] : SMsgList-Ee SMsgList-eE -> Strand .
+  op `[_|_`] : SMsgListN-Ee SMsgList-eE -> StrandN .
+  op `[_|_`] : SMsgListR-Ee SMsgList-eE -> StrandR .
+  op mt : -> StrandSet .
+  op _&_ : StrandSet StrandSet -> StrandSet [assoc comm id: mt] .
+  op _&_ : StrandSetN StrandSetN -> StrandSetN [ditto] .
+  op _&_ : StrandSetR StrandSetR -> StrandSetR [ditto] .
+
+  --- Intruder Knowledge
+  sort IntruderKnowledge .
+  op mt : -> IntruderKnowledge .
+  op inI : Msg -> IntruderKnowledge .
+  op nI : Msg -> IntruderKnowledge .
+  op _,_ : IntruderKnowledge IntruderKnowledge -> IntruderKnowledge [assoc comm id: mt] .
+
+  --- General state
+  sort State .
+  op `{_`{_`}`} : StrandSetR IntruderKnowledge -> State .
+
+  --- Variables declaration
+  vars IK : IntruderKnowledge .
+  vars SS SS1 SS2 : StrandSet .
+  vars SSR SSR1 SSR2 : StrandSetR .
+  vars SSN SSN1 SSN2 : StrandSetN .
+  var M : Msg .
+  vars LeE1 LeE2 LeE3 : SMsgList-eE .
+  vars LEe1 LEe2 LEe3 : SMsgList-Ee .
+  var LREe1 : SMsgListR-Ee .
+
+  --- Rules
+  rl [receive-msg] : { (SSN & [ LREe1 , -(M) | LeE2 ])  { (inI(M) , IK) } } =>
+            { (SSN & [ LREe1 | -(M) , LeE2 ])  { (inI(M) , IK) } } [narrowing] .
+
+  rl [send-msg] : { (SS & [ LREe1 , +(M) | LeE2 ])  { (inI(M) , IK) } } =>
+            { (SS & [ LREe1 | +(M) , LeE2 ])  { (nI(M) , IK) } } [narrowing] .
+
+  crl [check-contraint] : { (SSR & [ LREe1 , {B:Boolean} | LeE2 ])  { IK } } =>
+            { (SSR & [ LREe1 | {B:Boolean} , LeE2 ])  { IK } } 
+    if B:Boolean = true [nonexec] .
+endm
+
