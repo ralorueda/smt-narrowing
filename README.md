@@ -18,7 +18,7 @@ This folder contains the execution calls of the examples used.
 This folder contains the outputs of the experiments of this work after running them.
 
 ## Algorithm execution
-The first step in running the algorithms is to run Maude. Once this is done, it is necessary to load the modules that are in the files in the root of the project. To do this, the "load [file]" command is used. Note that "native-narrowing.maude" is only neccesary if we want to compare with the original narrowing from Maude. It is also necessary to load the file containing the rewrite theory to be used. In our case, these files are located in "experimental-modules", but the user can specify any other. Finally, the call to the algorithm must be executed as follows:
+The first step in running the algorithms is to run Maude. Once this is done, it is necessary to load the modules that are in the files in the root of the project. To do this, the "load [file]" command is used. It is also necessary to load the file containing the rewrite theory to be used. In our case, these files are located at the root of the project, but the user can specify any other. Finally, the call to the algorithm must be executed as follows:
 
 ```
 reduce in NARROWING :
