@@ -37,7 +37,7 @@ Where the parameters that are between "<" and ">" are at the user's choice. The 
 * narrowing_type: It can be "standard" or "canonical". In the second case, irreducibility constraints will be used to eliminate unnecessary narrowing steps. If we also add "smt" at the beginning of any of the two, we will indicate that a conditional module with SMT restrictions is used.
 * variant_option_set: It can be "filter" or "none" (review Maude's original command). The first case only works correctly for standard narrowing.
 * irreducibility_constrainst: Takes the value of the list of initial irreducibility constraints. It can be empty. In fact, if standard narrowing is used, it will be ignored even if it is given another value.
-* smt_constrainst: 
+* smt_constrainst: This parameter allows an initial SMT constraint to be indicated (it can be a combination of several). If you do not want to use it, you must indicate the value 'true.Boolean.
 * variable_qid: This parameter is important if an identifier is used for variables in the start and/or target terms that is '@, '#, or '%. It must be indicated in it which of them is used. In case none are used, choose any of them for this parameter.
 * maximum_depth: Maximum depth that you want to deploy the search tree for narrowing.
 * maximum_solutions: Maximum solutions that you want the narrowing algorithm to find.
